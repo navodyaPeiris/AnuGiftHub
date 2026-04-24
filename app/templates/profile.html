@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - AnuGiftHub{% endblock %}
+
+{% block content %}
+<div class="auth-container" style="max-width: 550px;">
+    <h2>My Profile</h2>
+
+    <form action="{{ url_for('main.profile') }}" method="POST">
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" name="name" value="{{ user.name }}" required>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" value="{{ user.email }}" required>
+        </div>
+        <div class="form-group">
+            <label>New Password <small style="color:#999;">(leave blank to keep current)</small></label>
+            <input type="password" name="password" placeholder="Enter new password">
+        </div>
+        <button type="submit" class="btn-primary">Update Profile</button>
+    </form>
+</div>
+{% endblock %}

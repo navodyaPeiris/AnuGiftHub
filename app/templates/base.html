@@ -21,6 +21,7 @@
                 {% if current_user.is_admin %}
                     <a href="{{ url_for('main.admin_dashboard') }}">Admin</a>
                 {% endif %}
+                <a href="{{ url_for('main.profile') }}">Profile</a>
                 <a href="{{ url_for('main.logout') }}">Logout</a>
             {% else %}
                 <a href="{{ url_for('main.login') }}">Login</a>

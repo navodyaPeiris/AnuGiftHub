@@ -383,3 +383,31 @@ def cancel_order(id):
         flash('This order cannot be cancelled.', 'danger')
     cur.close()
     return redirect(url_for('main.my_orders'))
+
+@main.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        try:
+            if password:
+                hashed = bcrypt.generate_password_hash(password).decode('utf-8')
+                cur.execute("UPDATE users SET name=%s, email=%s, password=%s WHERE id=%s",
+                            (name, email, hashed, current_user.id))
+            else:
+                cur.execute("UPDATE users SET name=%s, email=%s WHERE id=%s",
+                            (name, email, current_user.id))
+            mysql.connection.commit()
+            flash('Profile updated successfully!', 'success')
+        except:
+            flash('Email already in use!', 'danger')
+        finally:
+            cur.close()
+        return redirect(url_for('main.profile'))
+    cur.execute("SELECT * FROM users WHERE id=%s", (current_user.id,))
+    user = cur.fetchone()
+    cur.close()
+    return render_template('profile.html', user=user)
