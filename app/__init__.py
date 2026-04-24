@@ -5,6 +5,7 @@ from flask_mail import Mail
 from flask_bcrypt import Bcrypt
 from app.config import Config
 import MySQLdb.cursors
+from flask import render_template
 
 mysql = MySQL()
 login_manager = LoginManager()
@@ -26,5 +27,13 @@ def create_app():
     from app import models
     from app.routes import main
     app.register_blueprint(main)
+
+    @app.errorhandler(403)
+    def forbidden(e):
+        return render_template('403.html'), 403
+
+    @app.errorhandler(404)
+    def not_found(e):
+        return render_template('404.html'), 404
 
     return app

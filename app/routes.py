@@ -204,12 +204,14 @@ def checkout():
         order_id = cur.lastrowid
 
         for item in items:
-            cur.execute("SELECT price FROM products WHERE id = %s", (item['id'],))
+            cur.execute("SELECT price, stock FROM products WHERE id = %s", (item['id'],))
             product = cur.fetchone()
             cur.execute("""
                 INSERT INTO order_items (order_id, product_id, quantity, price)
                 VALUES (%s, %s, %s, %s)
             """, (order_id, item['id'], item['quantity'], product['price']))
+            cur.execute("UPDATE products SET stock = stock - %s WHERE id = %s",
+                        (item['quantity'], item['id']))
         mysql.connection.commit()
         cur.close()
 
@@ -227,8 +229,20 @@ def orders():
     cur.execute("SELECT * FROM orders WHERE user_id = %s ORDER BY created_at DESC",
                 (current_user.id,))
     orders = cur.fetchall()
+    
+    orders_with_items = []
+    for order in orders:
+        cur.execute("""
+            SELECT order_items.*, products.name, products.image
+            FROM order_items
+            JOIN products ON order_items.product_id = products.id
+            WHERE order_items.order_id = %s
+        """, (order['id'],))
+        items = cur.fetchall()
+        orders_with_items.append({'order': order, 'items': items})
+    
     cur.close()
-    return render_template('orders.html', orders=orders)
+    return render_template('orders.html', orders=orders_with_items)
 
 # ─── ADMIN ────────────────────────────────────────────────
 

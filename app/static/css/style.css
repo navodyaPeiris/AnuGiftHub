@@ -370,4 +370,18 @@ th {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.status-cancelled { background: #f8d7da; color: #721c24; }
+.status-cancelled { 
+    background: #f8d7da; 
+    color: #721c24; 
+}
+
+.order-items-list {
+    margin-bottom: 15px;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}

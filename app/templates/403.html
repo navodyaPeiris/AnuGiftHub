@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Access Denied - AnuGiftHub{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 80px 20px;">
+    <h1 style="font-size: 5rem; color: #c0392b;">403</h1>
+    <h2>Access Denied</h2>
+    <p>You don't have permission to access this page.</p>
+    <a href="{{ url_for('main.index') }}" class="btn-primary" style="margin-top: 20px;">Go Home</a>
+</div>
+{% endblock %}

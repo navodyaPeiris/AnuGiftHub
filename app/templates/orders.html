@@ -7,14 +7,31 @@
     <h2>My Orders</h2>
 
     {% if orders %}
-        {% for order in orders %}
+        {% for entry in orders %}
+        {% set order = entry.order %}
+        {% set items = entry.items %}
         <div class="order-card">
             <div class="order-header">
                 <span><strong>Order #{{ order.id }}</strong></span>
-                <span class="order-status status-{{ order.status }}">{{ order.status }}</span>
+                <span class="order-status status-{{ order.status }}">{{ order.status.replace('_', ' ').title() }}</span>
                 <span>{{ order.created_at }}</span>
             </div>
             <div class="order-body">
+
+                <!-- ORDER ITEMS -->
+                <div class="order-items-list">
+                    {% for item in items %}
+                    <div class="order-item">
+                        <img src="{{ url_for('static', filename='images/' + item.image) }}" width="60" style="border-radius:5px;">
+                        <div style="margin-left:10px;">
+                            <strong>{{ item.name }}</strong>
+                            <p>Qty: {{ item.quantity }} × LKR {{ item.price }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <hr>
                 <p><strong>Delivery Address:</strong> {{ order.address }}</p>
                 <p><strong>Delivery Date:</strong> {{ order.delivery_date }}</p>
                 {% if order.is_gift %}
