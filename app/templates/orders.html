@@ -8,41 +8,21 @@
 
     {% if orders %}
         {% for entry in orders %}
-        {% set order = entry.order %}
-        {% set items = entry.items %}
+        {% set order = entry['order'] %}
         <div class="order-card">
             <div class="order-header">
-                <span><strong>Order #{{ order.id }}</strong></span>
-                <span class="order-status status-{{ order.status }}">{{ order.status.replace('_', ' ').title() }}</span>
-                <span>{{ order.created_at }}</span>
+                <span><strong>Order #{{ order['id'] }}</strong></span>
+                <span class="order-status status-{{ order['status'] }}">{{ order['status'] | replace('_', ' ') | title }}</span>
+                <span>{{ order['created_at'] }}</span>
             </div>
             <div class="order-body">
-
-                <!-- ORDER ITEMS -->
-                <div class="order-items-list">
-                    {% for item in items %}
-                    <div class="order-item">
-                        <img src="{{ url_for('static', filename='images/' + item.image) }}" width="60" style="border-radius:5px;">
-                        <div style="margin-left:10px;">
-                            <strong>{{ item.name }}</strong>
-                            <p>Qty: {{ item.quantity }} × LKR {{ item.price }}</p>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-
-                <hr>
-                <p><strong>Delivery Address:</strong> {{ order.address }}</p>
-                <p><strong>Delivery Date:</strong> {{ order.delivery_date }}</p>
-                {% if order.is_gift %}
-                <p><strong>🎁 Gift for:</strong> {{ order.receiver_name or 'Not specified' }}</p>
-                <p><strong>Occasion:</strong> {{ order.occasion or 'Not specified' }}</p>
-                {% endif %}
-                <p><strong>Delivery Charge:</strong> LKR {{ order.delivery_charge }}</p>
-                <p><strong>Total:</strong> LKR {{ order.total }}</p>
+                <p><strong>Delivery Address:</strong> {{ order['address'] }}</p>
+                <p><strong>Delivery Date:</strong> {{ order['delivery_date'] }}</p>
+                <p><strong>Delivery Charge:</strong> LKR {{ order['delivery_charge'] }}</p>
+                <p><strong>Total:</strong> LKR {{ order['total'] }}</p>
             </div>
-            {% if order.status == 'confirmed' %}
-            <form action="{{ url_for('main.cancel_order', id=order.id) }}" method="POST"
+            {% if order['status'] == 'confirmed' %}
+            <form action="{{ url_for('main.cancel_order', id=order['id']) }}" method="POST"
                   onsubmit="return confirm('Are you sure you want to cancel this order?')">
                 <button type="submit" class="btn-danger">Cancel Order</button>
             </form>
