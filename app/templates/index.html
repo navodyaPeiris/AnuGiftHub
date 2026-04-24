@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - AnuGiftHub{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>🎁 Welcome to AnuGiftHub</h1>
+        <p>Find the perfect gift for your loved ones — delivered with love!</p>
+        <a href="{{ url_for('main.products') }}" class="btn-primary">Shop Now</a>
+    </div>
+</section>
+
+<section class="features">
+    <div class="feature-card">
+        <span>🎀</span>
+        <h3>Gift Wrapping</h3>
+        <p>Beautiful gift wrapping for every occasion</p>
+    </div>
+    <div class="feature-card">
+        <span>🚚</span>
+        <h3>Island-wide Delivery</h3>
+        <p>We deliver to all districts in Sri Lanka</p>
+    </div>
+    <div class="feature-card">
+        <span>💌</span>
+        <h3>Personal Messages</h3>
+        <p>Add a heartfelt message to your gift</p>
+    </div>
+</section>
+{% endblock %}

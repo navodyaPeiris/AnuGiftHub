@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - AnuGiftHub{% endblock %}
+
+{% block content %}
+<div class="admin-page">
+    <h2>Admin Dashboard</h2>
+
+    <div class="admin-stats">
+        <div class="stat-card">
+            <h3>Total Orders</h3>
+            <p>{{ total_orders }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Products</h3>
+            <p>{{ total_products }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>Total Users</h3>
+            <p>{{ total_users }}</p>
+        </div>
+    </div>
+
+    <div class="admin-links">
+        <a href="{{ url_for('main.admin_products') }}" class="btn-primary">Manage Products</a>
+        <a href="{{ url_for('main.admin_orders') }}" class="btn-primary">Manage Orders</a>
+    </div>
+</div>
+{% endblock %}

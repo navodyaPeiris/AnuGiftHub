@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout - AnuGiftHub{% endblock %}
+
+{% block content %}
+<div class="checkout-page">
+    <h2>Checkout</h2>
+    <form action="{{ url_for('main.checkout') }}" method="POST">
+
+        <div class="form-section">
+            <h3>Delivery Details</h3>
+            <div class="form-group">
+                <label>Delivery Address</label>
+                <textarea name="address" placeholder="Enter your full address" required></textarea>
+            </div>
+            <div class="form-group">
+                <label>District</label>
+                <select name="district_id" id="districtSelect" required>
+                    <option value="">Select your district</option>
+                    {% for district in districts %}
+                    <option value="{{ district.id }}" data-charge="{{ district.delivery_charge }}">
+                        {{ district.name }} - LKR {{ district.delivery_charge }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Preferred Delivery Date</label>
+                <input type="date" name="delivery_date" id="deliveryDate" required>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h3>Order Type</h3>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="is_gift" id="isGift"> This is a gift 🎁
+                </label>
+            </div>
+
+            <div id="giftFields" style="display:none;">
+                <div class="form-group">
+                    <label>Receiver's Name (optional)</label>
+                    <input type="text" name="receiver_name" placeholder="Enter receiver's name">
+                </div>
+                <div class="form-group">
+                    <label>Occasion (optional)</label>
+                    <select name="occasion">
+                        <option value="">Select occasion</option>
+                        <option value="birthday">Birthday</option>
+                        <option value="wedding">Wedding</option>
+                        <option value="anniversary">Anniversary</option>
+                        <option value="graduation">Graduation</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Personal Message (optional)</label>
+                    <textarea name="message" placeholder="Write a personal message..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            <p>Subtotal: <strong id="subtotal">LKR 0.00</strong></p>
+            <p>Delivery Charge: <strong id="deliveryCharge">LKR 0.00</strong></p>
+            <p>Total: <strong id="total">LKR 0.00</strong></p>
+        </div>
+
+        <input type="hidden" name="cart_items" id="cartItemsInput">
+        <div class="form-section">
+            <h3>Payment Method</h3>
+            <div class="form-group">
+                <label>
+                    <input type="radio" name="payment" value="cod" checked> 
+                    💵 Cash on Delivery (COD)
+                </label>
+            </div>
+        </div>
+        <button type="submit" class="btn-primary" onclick="prepareOrder()">Place Order</button>
+    </form>
+</div>
+
+<script>
+    // Load cart and update subtotal
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+    fetch('/api/products?ids=' + cart.map(i => i.id).join(','))
+        .then(res => res.json())
+        .then(products => {
+            let subtotal = 0;
+            cart.forEach(item => {
+                const p = products.find(p => p.id == item.id);
+                if (p) subtotal += p.price * item.quantity;
+            });
+            document.getElementById('subtotal').textContent = 'LKR ' + subtotal.toFixed(2);
+            updateTotal();
+        });
+
+    document.getElementById('districtSelect').addEventListener('change', function() {
+        const charge = parseFloat(this.options[this.selectedIndex].dataset.charge) || 0;
+        document.getElementById('deliveryCharge').textContent = 'LKR ' + charge.toFixed(2);
+        updateTotal();
+    });
+
+    function updateTotal() {
+        const subtotal = parseFloat(document.getElementById('subtotal').textContent.replace('LKR ', '')) || 0;
+        const charge = parseFloat(document.getElementById('deliveryCharge').textContent.replace('LKR ', '')) || 0;
+        document.getElementById('total').textContent = 'LKR ' + (subtotal + charge).toFixed(2);
+    }
+
+    // Set minimum delivery date to 3 days from today
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate() + 3);
+    document.getElementById('deliveryDate').min = minDate.toISOString().split('T')[0];
+
+    function prepareOrder() {
+        document.getElementById('cartItemsInput').value = JSON.stringify(cart);
+    }
+
+    document.getElementById('isGift').addEventListener('change', function() {
+        document.getElementById('giftFields').style.display = this.checked ? 'block' : 'none';
+    });
+</script>
+
+{% endblock %}

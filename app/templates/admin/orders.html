@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Orders - AnuGiftHub{% endblock %}
+
+{% block content %}
+<div class="admin-page">
+    <h2>Manage Orders</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Address</th>
+                <th>Delivery Date</th>
+                <th>Total</th>
+                <th>Gift</th>
+                <th>Status</th>
+                <th>Update Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if orders %}
+                {% for order in orders %}
+                <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>{{ order.user_name }}</td>
+                    <td>{{ order.address }}</td>
+                    <td>{{ order.delivery_date }}</td>
+                    <td>LKR {{ order.total }}</td>
+                    <td>{{ '🎁 Yes' if order.is_gift else 'No' }}</td>
+                    <td>
+                        <span class="order-status status-{{ order.status }}">
+                            {{ order.status }}
+                        </span>
+                    </td>
+                    <td>
+                        <form action="{{ url_for('main.admin_update_order', id=order.id) }}" method="POST">
+                            <select name="status">
+                                <option value="confirmed" {% if order.status == 'confirmed' %}selected{% endif %}>Confirmed</option>
+                                <option value="preparing" {% if order.status == 'preparing' %}selected{% endif %}>Preparing</option>
+                                <option value="handed_to_courier" {% if order.status == 'handed_to_courier' %}selected{% endif %}>Handed to Courier</option>
+                                <option value="out_for_delivery" {% if order.status == 'out_for_delivery' %}selected{% endif %}>Out for Delivery</option>
+                                <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Delivered</option>
+                            </select>
+                            <button type="submit" class="btn-primary">Update</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr><td colspan="8">No orders yet.</td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

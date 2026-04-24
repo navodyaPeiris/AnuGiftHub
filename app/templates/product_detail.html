@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }} - AnuGiftHub{% endblock %}
+
+{% block content %}
+<div class="product-detail">
+    <div class="product-detail-image">
+        <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}">
+    </div>
+    <div class="product-detail-info">
+        <h2>{{ product.name }}</h2>
+        <p class="price">LKR {{ product.price }}</p>
+        <p class="description">{{ product.description }}</p>
+        <button class="btn-primary" onclick="addToCart({{ product.id }})">Add to Cart 🛒</button>
+    </div>
+</div>
+
+<!-- COMMENTS SECTION -->
+<div class="comments-section">
+    <h3>Comments</h3>
+
+    {% if current_user.is_authenticated %}
+    <form action="{{ url_for('main.product_detail', id=product.id) }}" method="POST">
+        <div class="form-group">
+            <textarea name="comment" placeholder="Write a comment..." required></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Post Comment</button>
+    </form>
+    {% else %}
+    <p><a href="{{ url_for('main.login') }}">Login</a> to leave a comment.</p>
+    {% endif %}
+
+    <div class="comments-list">
+        {% if comments %}
+            {% for comment in comments %}
+            <div class="comment-card">
+                <strong>{{ comment.user_name }}</strong>
+                <span class="comment-date">{{ comment.created_at }}</span>
+                <p>{{ comment.content }}</p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No comments yet. Be the first!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

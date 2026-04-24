@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Cart - AnuGiftHub{% endblock %}
+
+{% block content %}
+<div class="cart-page">
+    <div class="cart-items" id="cartItems">
+        <h2>🛒 Your Cart</h2>
+        <div id="cartList"></div>
+    </div>
+
+    <div class="cart-summary">
+        <h3>Order Summary</h3>
+        <div class="summary-row">
+            <span>Subtotal:</span>
+            <span id="subtotal">LKR 0.00</span>
+        </div>
+        <div class="summary-row">
+            <span>Delivery Charge:</span>
+            <span id="deliveryCharge">LKR 0.00</span>
+        </div>
+        <div class="summary-row total">
+            <span>Total:</span>
+            <span id="total">LKR 0.00</span>
+        </div>
+        <a href="{{ url_for('main.checkout') }}" class="btn-primary" id="checkoutBtn">
+            Proceed to Checkout
+        </a>
+    </div>
+</div>
+
+<script>
+const cart = JSON.parse(localStorage.getItem('cart')) || [];
+const cartList = document.getElementById('cartList');
+const subtotalEl = document.getElementById('subtotal');
+const totalEl = document.getElementById('total');
+
+if (cart.length === 0) {
+    cartList.innerHTML = '<p>Your cart is empty. <a href="/products">Shop now!</a></p>';
+} else {
+    // Fetch product details for each cart item
+    const productIds = cart.map(item => item.id);
+    
+    fetch('/api/products?ids=' + productIds.join(','))
+        .then(res => res.json())
+        .then(products => {
+            let subtotal = 0;
+            let html = '';
+            cart.forEach(cartItem => {
+                const product = products.find(p => p.id == cartItem.id);
+                if (product) {
+                    const itemTotal = product.price * cartItem.quantity;
+                    subtotal += itemTotal;
+                    html += `
+                        <div class="cart-item">
+                            <img src="/static/images/${product.image}" width="80" style="border-radius:8px;">
+                            <div style="flex:1; margin-left:15px;">
+                                <h4>${product.name}</h4>
+                                <p>LKR ${product.price} x ${cartItem.quantity}</p>
+                            </div>
+                            <div>
+                                <strong>LKR ${itemTotal.toFixed(2)}</strong>
+                                <button onclick="removeFromCart(${product.id})" style="display:block; margin-top:5px; background:#e74c3c; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Remove</button>
+                            </div>
+                        </div>
+                        <hr>
+                    `;
+                }
+            });
+            cartList.innerHTML = html;
+            subtotalEl.textContent = 'LKR ' + subtotal.toFixed(2);
+            totalEl.textContent = 'LKR ' + subtotal.toFixed(2);
+        });
+}
+
+function removeFromCart(productId) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart = cart.filter(item => item.id !== productId);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    location.reload();
+}
+</script>
+{% endblock %}

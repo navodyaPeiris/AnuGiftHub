@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Products - AnuGiftHub{% endblock %}
+
+{% block content %}
+<div class="admin-page">
+    <h2>Manage Products</h2>
+
+    <!-- ADD PRODUCT FORM -->
+    <div class="admin-form">
+        <h3>Add New Product</h3>
+        <form action="{{ url_for('main.admin_products') }}" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Product Name</label>
+                <input type="text" name="name" placeholder="Enter product name" required>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" placeholder="Enter product description"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Price (LKR)</label>
+                <input type="number" name="price" placeholder="Enter price" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select name="category">
+                    <option value="toys">Toys</option>
+                    <option value="flowers">Flowers</option>
+                    <option value="cakes">Cakes</option>
+                    <option value="jewelry">Jewelry</option>
+                    <option value="clothing">Clothing</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Stock</label>
+                <input type="number" name="stock" placeholder="Enter stock quantity" required>
+            </div>
+            <div class="form-group">
+                <label>Product Image</label>
+                <input type="file" name="image" accept="image/*" required>
+            </div>
+            <button type="submit" class="btn-primary">Add Product</button>
+        </form>
+    </div>
+
+    <!-- PRODUCTS LIST -->
+    <div class="admin-list">
+        <h3>All Products</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Stock</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if products %}
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ product.id }}</td>
+                        <td><img src="{{ url_for('static', filename='images/' + product.image) }}" width="50"></td>
+                        <td>{{ product.name }}</td>
+                        <td>LKR {{ product.price }}</td>
+                        <td>{{ product.category }}</td>
+                        <td>{{ product.stock }}</td>
+                        <td>
+                            <form action="{{ url_for('main.admin_delete_product', id=product.id) }}" method="POST">
+                                <button type="submit" class="btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr><td colspan="7">No products yet.</td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

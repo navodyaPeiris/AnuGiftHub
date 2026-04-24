@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - AnuGiftHub{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h2>Welcome Back</h2>
+    <form action="{{ url_for('main.login') }}" method="POST">
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="Enter your email" required>
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn-primary">Login</button>
+        <p>Don't have an account? <a href="{{ url_for('main.register') }}">Register here</a></p>
+    </form>
+</div>
+{% endblock %}
