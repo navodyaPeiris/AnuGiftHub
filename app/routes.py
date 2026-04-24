@@ -226,35 +226,11 @@ def checkout():
 @login_required
 def my_orders():
     cur = mysql.connection.cursor()
-    cur.execute("""
-        SELECT o.*, oi.quantity, oi.price as item_price,
-               p.name as product_name, p.image as product_image
-        FROM orders o
-        LEFT JOIN order_items oi ON o.id = oi.order_id
-        LEFT JOIN products p ON oi.product_id = p.id
-        WHERE o.user_id = %s
-        ORDER BY o.created_at DESC
-    """, (current_user.id,))
+    cur.execute("SELECT * FROM orders WHERE user_id = %s ORDER BY created_at DESC",
+                (current_user.id,))
     rows = cur.fetchall()
     cur.close()
-
-    orders_dict = {}
-    for row in rows:
-        oid = row['id']
-        if oid not in orders_dict:
-            orders_dict[oid] = {
-                'order': row,
-                'items': []
-            }
-        if row['product_name']:
-            orders_dict[oid]['items'].append({
-                'name': row['product_name'],
-                'image': row['product_image'],
-                'quantity': row['quantity'],
-                'price': row['item_price']
-            })
-
-    result = list(orders_dict.values())
+    result = [dict(row) for row in rows]
     return render_template('orders.html', orders=result)
 
 # ─── ADMIN ────────────────────────────────────────────────
