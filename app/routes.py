@@ -190,6 +190,14 @@ def checkout():
         for item in items:
             cur.execute("SELECT price, stock, name FROM products WHERE id = %s", (item['id'],))
             product = cur.fetchone()
+            if product is None:
+                flash('One of the products in your cart is no longer available.', 'danger')
+                cur.close()
+                return redirect(url_for('main.cart'))
+            if product is None:
+                flash('One of the products in your cart is no longer available.', 'danger')
+                cur.close()
+                return redirect(url_for('main.cart'))
             if product['stock'] < item['quantity']:
                 flash(f"Sorry! Only {product['stock']} units of {product['name']} available.", 'danger')
                 cur.close()
