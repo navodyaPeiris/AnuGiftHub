@@ -35,6 +35,7 @@
                         </span>
                     </td>
                     <td>
+                        {% if order.status != 'cancelled' %}
                         <form action="{{ url_for('main.admin_update_order', id=order.id) }}" method="POST">
                             <select name="status">
                                 <option value="confirmed" {% if order.status == 'confirmed' %}selected{% endif %}>Confirmed</option>
@@ -45,6 +46,9 @@
                             </select>
                             <button type="submit" class="btn-primary">Update</button>
                         </form>
+                        {% else %}
+                        <span style="color:#721c24; font-weight:bold;">Cancelled</span>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
