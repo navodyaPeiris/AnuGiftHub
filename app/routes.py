@@ -265,7 +265,7 @@ def admin_products():
         stock = request.form.get('stock')
         image = request.files.get('image')
 
-        if image and allowed_file(image.filename):
+        if image and image.filename != '' and allowed_file(image.filename):
             filename = secure_filename(image.filename)
             image.save(os.path.join(UPLOAD_FOLDER, filename))
         else:
@@ -288,6 +288,8 @@ def admin_products():
 @admin_required
 def admin_delete_product(id):
     cur = mysql.connection.cursor()
+    cur.execute("DELETE FROM order_items WHERE product_id = %s", (id,))
+    cur.execute("DELETE FROM comments WHERE product_id = %s", (id,))
     cur.execute("DELETE FROM products WHERE id = %s", (id,))
     mysql.connection.commit()
     cur.close()

@@ -17,7 +17,27 @@ function addToCart(productId) {
         cart.push({ id: productId, quantity: 1 });
     }
     saveCart(cart);
-    alert('Added to cart! 🛒');
+    showToast('Added to cart! 🛒');
+}
+
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #4a1259;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 10px;
+        font-size: 1rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 9999;
+        animation: fadeIn 0.3s ease;
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
 }
 
 // ─── SEARCH & FILTER ───────────────────────────────────────

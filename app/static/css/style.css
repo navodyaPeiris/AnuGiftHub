@@ -6,13 +6,13 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9f9f9;
+    background-color: #fff5f7;
     color: #333;
 }
 
 /* ─── NAVBAR ─── */
 .navbar {
-    background-color: #c0392b;
+    background-color: #4a1259;
     padding: 15px 30px;
     display: flex;
     justify-content: space-between;
@@ -46,7 +46,7 @@ body {
 
 /* ─── BUTTONS ─── */
 .btn-primary {
-    background-color: #c0392b;
+    background-color: #7b2d8b;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -58,11 +58,11 @@ body {
 }
 
 .btn-primary:hover {
-    background-color: #a93226;
+    background-color: #6a1f7a;
 }
 
 .btn-danger {
-    background-color: #e74c3c;
+    background-color: #9b4dab;
     color: white;
     padding: 6px 12px;
     border: none;
@@ -72,7 +72,7 @@ body {
 
 /* ─── HERO ─── */
 .hero {
-    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    background: linear-gradient(135deg, #7b2d8b, #9b4dab);
     color: white;
     text-align: center;
     padding: 80px 20px;
@@ -144,7 +144,7 @@ body {
 }
 
 .price {
-    color: #c0392b;
+    color: #7b2d8b;
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 10px;
@@ -181,7 +181,7 @@ body {
 .auth-container h2 {
     margin-bottom: 25px;
     text-align: center;
-    color: #c0392b;
+    color: #7b2d8b;
 }
 
 .form-group {
@@ -274,7 +274,7 @@ body {
 .stat-card p {
     font-size: 2rem;
     font-weight: bold;
-    color: #c0392b;
+    color: #7b2d8b;
 }
 
 table {
@@ -293,13 +293,13 @@ th, td {
 }
 
 th {
-    background-color: #c0392b;
+    background-color: #4a1259;
     color: white;
 }
 
 /* ─── FOOTER ─── */
 .footer {
-    background-color: #333;
+    background-color: #4a1259;
     color: white;
     text-align: center;
     padding: 20px;
@@ -359,7 +359,7 @@ th {
 .summary-row.total {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #c0392b;
+    color: #7b2d8b;
 }
 
 .form-section {
