@@ -1,0 +1,17 @@
+done
+
+🎁 AnuGiftHub
+
+can we add the logo here?
+
+"🎁 AnuGiftHub
+
+Products 🛒 Cart My Orders Profile Logout
+
+My Orders
+
+You have no orders yet. Start shopping!
+
+© 2025 AnuGiftHub. All rights reserved."
+
+this is my orders section... can we make this footer section at the bottom of the screen? it is ugly when it came to middle of the screen

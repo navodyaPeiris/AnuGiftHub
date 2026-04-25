@@ -11,7 +11,11 @@
     <!-- NAVBAR -->
     <nav class="navbar">
         <div class="nav-brand">
-            <a href="{{ url_for('main.index') }}">🎁 AnuGiftHub</a>
+            <a href="{{ url_for('main.index') }}">
+                <img src="{{ url_for('static', filename='images/logo.jpg') }}" 
+                     alt="AnuGiftHub" style="height:45px; border-radius:50%; margin-right:8px; vertical-align:middle;">
+                AnuGiftHub
+            </a>
         </div>
         <div class="nav-links">
             <a href="{{ url_for('main.products') }}">Products</a>
