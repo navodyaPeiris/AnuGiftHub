@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Product - AnuGiftHub{% endblock %}
+
+{% block content %}
+<div class="admin-page">
+    <h2>Edit Product</h2>
+    <div class="admin-form">
+        <form action="{{ url_for('main.admin_edit_product', id=product.id) }}" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Product Name</label>
+                <input type="text" name="name" value="{{ product.name }}" required>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description">{{ product.description }}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Price (LKR)</label>
+                <input type="number" name="price" value="{{ product.price }}" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select name="category">
+                    <option value="toys" {% if product.category == 'toys' %}selected{% endif %}>Toys</option>
+                    <option value="flowers" {% if product.category == 'flowers' %}selected{% endif %}>Flowers</option>
+                    <option value="cakes" {% if product.category == 'cakes' %}selected{% endif %}>Cakes</option>
+                    <option value="jewelry" {% if product.category == 'jewelry' %}selected{% endif %}>Jewelry</option>
+                    <option value="clothing" {% if product.category == 'clothing' %}selected{% endif %}>Clothing</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Stock</label>
+                <input type="number" name="stock" value="{{ product.stock }}" required>
+            </div>
+            <div class="form-group">
+                <label>Current Image</label><br>
+                <img src="{{ url_for('static', filename='images/' + product.image) }}" width="100" style="border-radius:8px; margin-bottom:10px;">
+                <label>Change Image (optional)</label>
+                <input type="file" name="image" accept="image/*">
+            </div>
+            <button type="submit" class="btn-primary">Update Product</button>
+            <a href="{{ url_for('main.admin_products') }}" class="btn-danger" style="margin-left:10px; padding:10px 20px; text-decoration:none;">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

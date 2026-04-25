@@ -188,8 +188,12 @@ def checkout():
         items = json.loads(cart_items)
         subtotal = 0
         for item in items:
-            cur.execute("SELECT price FROM products WHERE id = %s", (item['id'],))
+            cur.execute("SELECT price, stock, name FROM products WHERE id = %s", (item['id'],))
             product = cur.fetchone()
+            if product['stock'] < item['quantity']:
+                flash(f"Sorry! Only {product['stock']} units of {product['name']} available.", 'danger')
+                cur.close()
+                return redirect(url_for('main.cart'))
             subtotal += product['price'] * item['quantity']
 
         total = subtotal + delivery_charge
@@ -325,6 +329,42 @@ def admin_update_order(id):
     cur.close()
     flash('Order status updated!', 'success')
     return redirect(url_for('main.admin_orders'))
+
+@main.route('/admin/products/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def admin_edit_product(id):
+    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+        price = request.form.get('price')
+        category = request.form.get('category')
+        stock = request.form.get('stock')
+        image = request.files.get('image')
+
+        if image and image.filename != '' and allowed_file(image.filename):
+            filename = secure_filename(image.filename)
+            image.save(os.path.join(UPLOAD_FOLDER, filename))
+            cur.execute("""
+                UPDATE products SET name=%s, description=%s, price=%s,
+                category=%s, stock=%s, image=%s WHERE id=%s
+            """, (name, description, price, category, stock, filename, id))
+        else:
+            cur.execute("""
+                UPDATE products SET name=%s, description=%s, price=%s,
+                category=%s, stock=%s WHERE id=%s
+            """, (name, description, price, category, stock, id))
+
+        mysql.connection.commit()
+        cur.close()
+        flash('Product updated!', 'success')
+        return redirect(url_for('main.admin_products'))
+
+    cur.execute("SELECT * FROM products WHERE id = %s", (id,))
+    product = cur.fetchone()
+    cur.close()
+    return render_template('admin/edit_product.html', product=product)
 
 @main.route('/api/products')
 def api_products():

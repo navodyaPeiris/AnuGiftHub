@@ -70,8 +70,9 @@
                         <td>{{ product.category }}</td>
                         <td>{{ product.stock }}</td>
                         <td>
-                            <form action="{{ url_for('main.admin_delete_product', id=product.id) }}" method="POST">
-                                <button type="submit" class="btn-danger">Delete</button>
+                            <a href="{{ url_for('main.admin_edit_product', id=product.id) }}" class="btn-primary" style="margin-right:5px;">Edit</a>
+                            <form action="{{ url_for('main.admin_delete_product', id=product.id) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn-danger" onclick="return confirm('Delete this product?')">Delete</button>
                             </form>
                         </td>
                     </tr>
